@@ -34,25 +34,14 @@ toponym_coodrinates = toponym["Point"]["pos"]
 # Долгота и широта:
 toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
 
-delta = str(max(float(str(abs(float(toponym["boundedBy"]["Envelope"]["lowerCorner"].split()[0]) -
-                    float(toponym["boundedBy"]["Envelope"]["upperCorner"].split()[0])))[0:6]),
-      float(str(abs(float(toponym["boundedBy"]["Envelope"]["lowerCorner"].split()[1]) -
-                    float(toponym["boundedBy"]["Envelope"]["upperCorner"].split()[1])))[0:6])))
+delta = getsize(toponym)
 
-for i in range(len(delta)):
-    if delta[i] != '0' and delta[i] != '.':
-        delta = list(delta)
-        delta[i] = '1'
-        delta = str(''.join(delta))
-        delta = delta[0:i + 1]
-        break
 
 # Собираем параметры для запроса к StaticMapsAPI:
 map_params = {
     "ll": ",".join([toponym_longitude, toponym_lattitude]),
     "spn": ",".join([delta, delta]),
     "l": "map",
-    "scale": getsize(),
     "pt": f'{toponym_longitude},{toponym_lattitude},pm2rdm'}
 
 map_api_server = "http://static-maps.yandex.ru/1.x/"
